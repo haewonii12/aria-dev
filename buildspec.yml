@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "No build step. Just packaging HTML..."
+  build:
+    commands:
+      - echo "Preparing static HTML for artifact..."
+artifacts:
+  files:
+    - '**/*.html'
+  name: build_out   # 👉 CodePipeline OutputArtifacts 이름과 일치
+

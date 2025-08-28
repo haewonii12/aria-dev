@@ -1,0 +1,37 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      # helm 설치
+      - curl -sSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+  pre_build:
+    commands:
+      - echo "=== 환경 변수 확인 ==="
+      - pwd
+      - ls -R $CODEBUILD_SRC_DIR
+      - ls -R $CODEBUILD_SRC_DIR_containerizing_output
+      # image_tag.txt 읽기
+      - IMAGE_TAG=$(cat $CODEBUILD_SRC_DIR_containerizing_output/image_tag.txt)
+      - |
+        REPO_URI=$(echo $IMAGE_TAG | cut -d: -f1)
+        VERSION=$(echo $IMAGE_TAG | cut -d: -f2)
+        echo "Deploying image: $REPO_URI:$VERSION"
+      # 변수 export 해서 다음 단계에서도 사용 가능하게
+      - export REPO_URI
+      - export VERSION
+
+  build:
+    commands:
+      - echo "=== kubeconfig 갱신 ==="
+      - aws eks update-kubeconfig --region ap-northeast-2 --name dev-eks
+      - echo "=== Helm Deploy 시작 ==="
+      - helm upgrade --install dev-app $CODEBUILD_SRC_DIR/helm/dev-app --namespace dev-app --create-namespace --set image.repository=$REPO_URI --set image.tag=$VERSION --debug
+#      - helm upgrade --install dev-app $CODEBUILD_SRC_DIR/helm/dev-app \
+#          --namespace dev-app \
+#          --create-namespace \
+#          --set image.repository=$REPO_URI \
+#          --set image.tag=$VERSION \
+#          --debug
+

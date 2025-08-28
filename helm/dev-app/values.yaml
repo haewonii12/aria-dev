@@ -1,0 +1,17 @@
+replicaCount: 1
+
+image:
+  repository: ""   # CodeBuild Deploy 단계에서 --set 으로 override
+  tag: ""          # CodeBuild Deploy 단계에서 --set 으로 override
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+namespaceOverride: dev-app
+
