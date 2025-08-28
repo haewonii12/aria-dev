@@ -1,0 +1,31 @@
+# ---- 가상환경은 컨테이너에 필요 없음 ----
+django-project/venv/
+venv/
+
+# ---- Python 캐시/빌드 산출물 ----
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+*.sqlite3
+*.db
+
+# ---- 패키징 관련 ----
+*.egg-info/
+.eggs/
+*.egg
+dist/
+build/
+
+# ---- VCS & OS 잡파일 ----
+.git/
+.gitignore
+Dockerfile
+*.swp
+*.swo
+.DS_Store
+
+# ---- IDE 설정 ----
+.vscode/
+.idea/
+*.iml
