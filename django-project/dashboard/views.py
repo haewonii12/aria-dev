@@ -1,0 +1,8 @@
+# dashboard/views.py
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+@login_required
+def summary(request):
+    # return render(request, 'dashboard/summary.html')
+    return render(request, 'dashboard.html')

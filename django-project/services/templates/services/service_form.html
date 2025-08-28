@@ -1,0 +1,20 @@
+<!-- templates/service_form.html -->
+{% extends 'base.html' %}
+{% load form_tags %} 
+{% block title %}서비스 등록{% endblock %}
+{% block content %}
+<div class="title-underline">📝 서비스 등록</div>
+
+<form method="post" class="bg-white p-4 rounded shadow-sm">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label for="id_name" class="form-label">서비스 이름</label>
+    {{ form.name|add_class:"form-control" }}
+  </div>
+  <div class="mb-3">
+    <label for="id_description" class="form-label">설명</label>
+    {{ form.description|add_class:"form-control" }}
+  </div>
+  <button type="submit" class="btn btn-modern">등록하기</button>
+</form>
+{% endblock %}

@@ -1,0 +1,23 @@
+<!-- templates/service_list.html -->
+{% extends 'base.html' %}
+{% block title %}서비스 목록{% endblock %}
+{% block content %}
+<div class="title-underline">📦 서비스 목록</div>
+
+<div class="row row-cols-1 row-cols-md-2 g-4">
+  {% for service in services %}
+    <div class="col">
+      <div class="card h-100 p-3">
+        <h5 class="card-title">{{ service.name }}</h5>
+        <p class="card-text text-muted">{{ service.description }}</p>
+      </div>
+    </div>
+  {% empty %}
+    <p class="text-muted">등록된 서비스가 없습니다.</p>
+  {% endfor %}
+</div>
+
+<div class="mt-4 text-end">
+  <a href="{% url 'service_create' %}" class="btn btn-modern">➕ 서비스 등록</a>
+</div>
+{% endblock %}

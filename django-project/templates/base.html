@@ -1,0 +1,285 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}관리자 UI{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- AdminLTE & FontAwesome -->
+  <link rel="stylesheet" href="{% static 'adminlte/plugins/fontawesome-free/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'adminlte/css/adminlte.min.css' %}">
+
+  <style>
+    /* 기본 브랜드 스타일 */
+    .brand-link {
+      display: flex;
+      align-items: center;
+      height: 57px;
+      padding-left: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .main-sidebar .nav-sidebar .nav-link.active {
+      background-color: rgba(255, 255, 255, 0.05) !important;
+      color: #ffffff !important;
+      /* 또는 원하는 기본 텍스트 색 */
+    }
+
+    .brand-text {
+      transition: opacity 0.3s ease;
+    }
+
+    /* 사이드바 접힘 상태일 때: 아이콘만 가운데 정렬 */
+    body.sidebar-mini.sidebar-collapse:not(.sidebar-hover) .main-sidebar .brand-link {
+      justify-content: center;
+      padding-left: 0;
+    }
+
+    body.sidebar-mini.sidebar-collapse:not(.sidebar-hover) .main-sidebar .brand-link .brand-text {
+      display: none !important;
+    }
+
+    /* Hover 시 다시 왼쪽 정렬 + 텍스트 보임 */
+    body.sidebar-mini.sidebar-collapse.sidebar-hover .main-sidebar .brand-link {
+      justify-content: flex-start !important;
+      padding-left: 1rem !important;
+    }
+
+    body.sidebar-mini.sidebar-collapse.sidebar-hover .main-sidebar .brand-link .brand-text {
+      display: inline !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+  </style>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+
+  <div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Brand Logo -->
+      <a href="/" class="brand-link">
+        <i class="fas fa-oil-can" style="color: #ffc107; font-size: 1.25rem;"></i>
+        <span class="brand-text font-weight-light ml-2">LAMP Portal</span>
+      </a>
+
+      <div class="sidebar">
+        {% if user.is_authenticated %}
+
+
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="info">
+            <a href="#" class="d-block">{{ user.username }}님</a>
+          </div>
+        </div>
+        {% endif %}
+
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" data-accordion="false">
+            <!-- 대시보드 -->
+            <li class="nav-item">
+              <a href="{% url 'dashboard_summary' %}"
+                class="nav-link {% if request.resolver_match.url_name == 'dashboard_summary' %}active{% endif %}">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>대시보드</p>
+              </a>
+            </li>
+
+            <!-- 서비스 관리 -->
+<li class="nav-item has-treeview" data-menu-id="services">
+  <a href="javascript:void(0);" class="nav-link {% if request.resolver_match.url_name == 'service_list' or request.resolver_match.url_name == 'service_create' %}active{% endif %}" onclick="event.preventDefault(); return false;">
+    <i class="nav-icon fas fa-cogs"></i>
+    <p>서비스 관리<i class="right fas fa-angle-left"></i></p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{% url 'service_list' %}"
+        class="nav-link {% if request.resolver_match.url_name == 'service_list' %}active{% endif %}">
+        <i class="fas fa-list-ul nav-icon"></i>
+        <p>서비스 목록</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{% url 'service_create' %}"
+        class="nav-link {% if request.resolver_match.url_name == 'service_create' %}active{% endif %}">
+        <i class="fas fa-edit nav-icon"></i>
+        <p>서비스 등록</p>
+      </a>
+    </li>
+  </ul>
+</li>
+
+<li class="nav-item has-treeview" data-menu-id="db">
+  <a href="javascript:void(0);" 
+     class="nav-link {% if request.resolver_match.url_name == 'db_list' or request.resolver_match.url_name == 'db_create' %}active{% endif %}" 
+     onclick="event.preventDefault(); return false;">
+    <i class="nav-icon fas fa-database"></i>
+    <p>DB 관리<i class="right fas fa-angle-left"></i></p>
+  </a>
+  <ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a href="{% url 'db_list' %}"
+        class="nav-link {% if request.resolver_match.url_name == 'db_list' %}active{% endif %}">
+        <i class="fas fa-list nav-icon"></i>
+        <p>DB 목록</p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{% url 'db_create' %}"
+        class="nav-link {% if request.resolver_match.url_name == 'db_create' %}active{% endif %}">
+        <i class="fas fa-plus nav-icon"></i>
+        <p>DB 등록</p>
+      </a>
+    </li>
+  </ul>
+</li>
+
+            <!-- IP 관리 -->
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-network-wired"></i>
+                <p>IP 관리<i class="right fas fa-angle-left"></i></p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{% url 'dashboard_summary' %}" class="nav-link">
+                    <i class="fas fa-list nav-icon"></i>
+                    <p>IP 목록</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'dashboard_summary' %}" class="nav-link">
+                    <i class="fas fa-plus nav-icon"></i>
+                    <p>IP 등록</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- 계정 관리 -->
+            <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-user-cog"></i>
+                <p>계정 관리<i class="right fas fa-angle-left"></i></p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{% url 'dashboard_summary' %}" class="nav-link">
+                    <i class="fas fa-users nav-icon"></i>
+                    <p>사용자 목록</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'dashboard_summary' %}" class="nav-link">
+                    <i class="fas fa-user-plus nav-icon"></i>
+                    <p>사용자 등록</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- 로그아웃 -->
+            <li class="nav-item">
+              <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+                {% csrf_token %}
+              </form>
+              <a href="#" class="nav-link"
+                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="nav-icon fas fa-sign-out-alt"></i>
+                <p>로그아웃</p>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- 메인 컨텐츠 -->
+    <div class="content-wrapper p-4">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="{% static 'adminlte/plugins/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'adminlte/js/adminlte.min.js' %}"></script>
+
+  <!---hover 적용-->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sidebar = document.querySelector('.main-sidebar');
+      const body = document.body;
+
+      sidebar.addEventListener('mouseenter', function () {
+        if (body.classList.contains('sidebar-collapse')) {
+          body.classList.add('sidebar-hover');
+        }
+      });
+
+      sidebar.addEventListener('mouseleave', function () {
+        if (body.classList.contains('sidebar-collapse')) {
+          body.classList.remove('sidebar-hover');
+        }
+      });
+    });
+  </script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // 메뉴 클릭 시 localStorage 갱신
+    document.querySelectorAll('.nav-item.has-treeview > a.nav-link').forEach(link => {
+      link.addEventListener('click', function () {
+        const parentLi = link.closest('li.nav-item.has-treeview');
+        const menuId = parentLi.getAttribute('data-menu-id');
+        if (!menuId) return;
+
+        let openMenus = JSON.parse(localStorage.getItem('openMenus') || '[]');
+
+        if (parentLi.classList.contains('menu-open')) {
+          // 닫힘 처리
+          openMenus = openMenus.filter(id => id !== menuId);
+        } else {
+          // 열림 처리
+          if (!openMenus.includes(menuId)) {
+            openMenus.push(menuId);
+          }
+        }
+
+        localStorage.setItem('openMenus', JSON.stringify(openMenus));
+      });
+    });
+
+    // 페이지 로드시 열어야 할 메뉴 열기
+    const openMenus = JSON.parse(localStorage.getItem('openMenus') || '[]');
+    openMenus.forEach(menuId => {
+      const target = document.querySelector('.nav-item.has-treeview[data-menu-id="' + menuId + '"]');
+      if (target) {
+        target.classList.add('menu-open');
+
+        // 하위에 active 메뉴가 있으면 상위 메뉴도 active 처리
+        const hasActiveChild = target.querySelector('.nav-link.active');
+        if (hasActiveChild) {
+          target.querySelector('> .nav-link').classList.add('active');
+        }
+      }
+    });
+  });
+  </script>
+
+</body>
+
+</html>

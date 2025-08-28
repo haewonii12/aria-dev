@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}서비스 목록{% endblock %}
+
+{% block content %}
+<h2>서비스 목록</h2>
+<a class="btn btn-primary mb-3" href="{% url 'service_create' %}">서비스 등록</a>
+
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>서비스명</th>
+      <th>설명</th>
+      <th>활성</th>
+      <th>등록일</th>
+      <th>관리</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for service in services %}
+    <tr>
+      <td>{{ service.name }}</td>
+      <td>{{ service.description }}</td>
+      <td>{{ service.is_active }}</td>
+      <td>{{ service.created_at|date:"Y-m-d H:i" }}</td>
+      <td>
+        <a class="btn btn-danger btn-sm" href="{% url 'service_delete' service.id %}">삭제</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
