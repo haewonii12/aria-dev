@@ -11,7 +11,7 @@ phases:
     commands:
       - echo "Downloading Python dependencies as wheels..."
       # requirements.txt 기반으로 wheel 파일 생성 (Git repo 경로에 맞춰 수정)
-      - pip download -r requirements.txt -d wheelhouse
+      - pip download -r django-project/requirements.txt -d wheelhouse
 
       - echo "Packaging wheelhouse..."
       - tar -czf wheelhouse.tar.gz wheelhouse
