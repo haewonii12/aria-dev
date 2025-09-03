@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Installing dependencies for caching..."
+      - python -m venv venv
+      - source venv/bin/activate
+      - pip install --upgrade pip setuptools wheel
+  build:
+    commands:
+      - echo "Downloading Python dependencies as wheels..."
+      # wheelhouse 폴더에 requirements.txt 기반 wheel 파일 생성
+      - pip download -r django-project/requirements.txt -d wheelhouse
+
+      - echo "Packaging wheelhouse..."
+      - tar -czf wheelhouse.tar.gz wheelhouse
+
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-10)
+      - echo "Uploading to S3..."
+      - aws s3 cp wheelhouse.tar.gz s3://haewon-dependency/haewon/$COMMIT_HASH/
+      - aws s3 cp wheelhouse.tar.gz s3://haewon-dependency/haewon/latest/wheelhouse.tar.gz
+artifacts:
+  files:
+    - wheelhouse.tar.gz
