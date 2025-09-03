@@ -2,24 +2,27 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      python: 3.11   # 필요 버전 (CodeBuild 런타임에서 지원되는 파이썬 버전으로 맞추면 됨)
     commands:
-      - echo "Installing dependencies for caching..."
-      - python -m venv venv
-      - source venv/bin/activate
+      - echo "Upgrading pip, setuptools, wheel..."
       - pip install --upgrade pip setuptools wheel
   build:
     commands:
       - echo "Downloading Python dependencies as wheels..."
-      # wheelhouse 폴더에 requirements.txt 기반 wheel 파일 생성
-      - pip download -r django-project/requirements.txt -d wheelhouse
+      # requirements.txt 기반으로 wheel 파일 생성 (Git repo 경로에 맞춰 수정)
+      - pip download -r requirements.txt -d wheelhouse
 
       - echo "Packaging wheelhouse..."
       - tar -czf wheelhouse.tar.gz wheelhouse
 
+      # Git commit hash 앞 10자리 따서 버전 디렉토리로 저장
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-10)
-      - echo "Uploading to S3..."
+      - echo "Uploading to S3 with commit hash: $COMMIT_HASH"
       - aws s3 cp wheelhouse.tar.gz s3://haewon-dependency/haewon/$COMMIT_HASH/
       - aws s3 cp wheelhouse.tar.gz s3://haewon-dependency/haewon/latest/wheelhouse.tar.gz
+
 artifacts:
   files:
     - wheelhouse.tar.gz
+
