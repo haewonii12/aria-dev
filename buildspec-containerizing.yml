@@ -24,8 +24,8 @@ phases:
         docker build \
           --build-arg DEBS_DIR=debs \
           --build-arg WHEELHOUSE_DIR=wheelhouse \
-          -t dev/dev-app:latest .
-      - docker tag dev/dev-app:latest $REPOSITORY_URI:$IMAGE_TAG   
+          --tag dev/dev-app:latest .
+      - "docker tag dev/dev-app:latest $REPOSITORY_URI:$IMAGE_TAG"
 
   post_build:
     commands:
