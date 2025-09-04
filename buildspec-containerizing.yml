@@ -18,7 +18,8 @@ phases:
       - aws s3 cp s3://haewon-dependency/system-deps/latest/debs.tar.gz ./debs.tar.gz
       - mkdir -p debs && tar -xzf debs.tar.gz -C debs
       - aws s3 cp s3://haewon-dependency/haewon/latest/wheelhouse.tar.gz ./wheelhouse.tar.gz
-      - mkdir -p wheelhouse && tar -xzf wheelhouse.tar.gz -C wheelhouse
+      - tar -xzf wheelhouse.tar.gz
+      - ls -l wheelhouse | head -20
       - echo "Building Docker image..."
       - docker build -t dev/dev-app:latest .
       - "docker tag dev/dev-app:latest $REPOSITORY_URI:$IMAGE_TAG"
