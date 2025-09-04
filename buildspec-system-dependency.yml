@@ -12,7 +12,8 @@ phases:
       - echo "Downloading system dependencies as .deb packages..."
       - apt-get update
       - mkdir -p debs
-      - apt-get install --download-only -y build-essential libpq-dev gcc
+      # 이미 설치된 패키지도 강제로 다시 다운로드
+      - apt-get install --reinstall --download-only -y build-essential libpq-dev gcc
       - cp /var/cache/apt/archives/*.deb debs/
       - echo "Packaging system deps..."
       - tar -czf debs.tar.gz debs
