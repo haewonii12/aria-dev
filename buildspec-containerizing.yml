@@ -30,7 +30,7 @@ phases:
   post_build:
     commands:
       - echo "Pushing Docker images..."
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - "docker push $REPOSITORY_URI:$IMAGE_TAG"
       - echo "Image pushed: ${REPOSITORY_URI}:${IMAGE_TAG}"
       - echo ${REPOSITORY_URI}:${IMAGE_TAG} > image_tag.txt
 
