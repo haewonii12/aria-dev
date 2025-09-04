@@ -7,14 +7,11 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # --- System deps 설치 ---
-ARG DEBS_DIR
-COPY ${DEBS_DIR}/ /tmp/debs/
+COPY debs/ /tmp/debs/
 RUN dpkg -i /tmp/debs/*.deb || apt-get install -f -y && rm -rf /tmp/debs
 
 # --- Python deps 설치 ---
-ARG WHEELHOUSE_DIR
-COPY ${WHEELHOUSE_DIR}/ /tmp/wheelhouse/
-# requirements.txt는 wheelhouse 안에 없으므로 직접 복사
+COPY wheelhouse/ /tmp/wheelhouse/
 COPY django-project/requirements.txt /tmp/wheelhouse/requirements.txt
 RUN pip install --no-index --find-links=/tmp/wheelhouse -r /tmp/wheelhouse/requirements.txt \
     && rm -rf /tmp/wheelhouse

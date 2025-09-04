@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.11   # CodeBuild 런타임에 맞는 파이썬 버전
+      python: 3.11
     commands:
       - echo "Upgrading pip, setuptools, wheel..."
       - pip install --upgrade pip setuptools wheel
@@ -11,7 +11,8 @@ phases:
   build:
     commands:
       - echo "Downloading Python dependencies as wheels..."
-      - pip download -r django-project/requirements.txt -d wheelhouse
+      - pip wheel -r django-project/requirements.txt -w wheelhouse
+      - cp django-project/requirements.txt wheelhouse/requirements.txt
       - echo "Packaging wheelhouse..."
       - tar -czf wheelhouse.tar.gz wheelhouse
       - |
