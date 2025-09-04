@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "Preparing system dependencies..."
+
+  build:
+    commands:
+      - echo "Downloading system dependencies as .deb packages..."
+      - apt-get update
+      - mkdir -p debs
+      - apt-get install --download-only -y build-essential libpq-dev gcc
+      - cp /var/cache/apt/archives/*.deb debs/
+      - echo "Packaging system deps..."
+      - tar -czf debs.tar.gz debs
+      - |
+        COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-10)
+        echo "Uploading to S3 with commit hash: $COMMIT_HASH"
+        aws s3 cp debs.tar.gz s3://haewon-dependency/system-deps/$COMMIT_HASH/
+        aws s3 cp debs.tar.gz s3://haewon-dependency/system-deps/latest/debs.tar.gz
+
+artifacts:
+  files:
+    - debs.tar.gz
+
