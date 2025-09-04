@@ -1,0 +1,32 @@
+version: 0.2
+
+env:
+  variables:
+    REPOSITORY_URI: "701622287110.dkr.ecr.ap-northeast-2.amazonaws.com/dev/dev-app"
+
+phases:
+  pre_build:
+    commands:
+      - echo "로그인 to Amazon ECR..."
+      - aws --version
+      - aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 701622287110.dkr.ecr.ap-northeast-2.amazonaws.com
+      - export IMAGE_TAG=`date +%Y%m%d%H%M%S`
+
+  build:
+    commands:
+      - echo "Copying artifacts into docker context..."
+#      - cp -r ./*.html ./
+      - echo "Building Docker image with nginx..."
+      - "docker build -t dev/dev-app:latest ."
+      - "docker tag dev/dev-app:latest $REPOSITORY_URI:$IMAGE_TAG"
+
+  post_build:
+    commands:
+      - echo "Pushing Docker images..."
+      - "docker push $REPOSITORY_URI:$IMAGE_TAG"
+      - 'echo Image pushed: ${REPOSITORY_URI}:${IMAGE_TAG}'
+      - echo ${REPOSITORY_URI}:${IMAGE_TAG} > image_tag.txt
+
+artifacts:
+  files:
+    - image_tag.txt
